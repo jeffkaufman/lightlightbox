@@ -10,9 +10,9 @@ document.write(
   "   background-color: black;" +
   "   margin: 0;" +
   "   padding: 0;" +
-  "   position: absolute;" + 
-  "   top: 0;" + 
-  "   left: 0;" + 
+  "   position: fixed;" +
+  "   top: 0;" +
+  "   left: 0;" +
   "}" +
   "#lbimg {" +
   "   margin: 0;" +
@@ -153,5 +153,5 @@ document.addEventListener("DOMContentLoaded", function() {
       link.onclick = load_lightbox_at_point(n);
       n++;
     }
-  }  
+  }
 });
