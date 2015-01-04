@@ -1,6 +1,6 @@
 var images = [];
 document.write(
-  "<div id=lbdiv><center><img id=lbimg src=''></center></div>" +
+  "<div id=lbdiv><img id=lbimg src=''></div>" +
   "<div id=spinnerdiv><center><img id=spinnerimg src='/spinner.gif'></center></div>" +
   "<style>" +
   "#lbdiv {" +
@@ -17,6 +17,7 @@ document.write(
   "#lbimg {" +
   "   margin: 0;" +
   "   padding: 0;" +
+  "   position: relative;" +
   "}" +
   "#spinnerdiv {" +
   "   display: none;" +
@@ -73,6 +74,9 @@ function update_image() {
   loading();
   lbimg.onload = done_loading;
   lbimg.src = images[img_index];
+  lbimg.style.left = "0px";
+  lbimg.style.top = "0px";
+  lbimg.style.display = "none";
 }
 
 function done_loading() {
@@ -90,14 +94,24 @@ function done_loading() {
   if (width_ratio > height_ratio) {
     lbimg.style.height = "";
     lbimg.style.width = available_width + "px";
+    lbimg.style.left = "0px";
+    lbimg.style.top = ((available_height - (image_native_height/width_ratio)) / 2) + "px";
   } else {
     lbimg.style.width = "";
     lbimg.style.height = available_height + "px";
+    lbimg.style.top = "0px";
+    lbimg.style.left = ((available_width - (image_native_width/height_ratio)) / 2) + "px";
   }
+  lbimg.style.display = "block";
 }
 
 function loading() {
   spinnerdiv.style.display = "block";
+}
+
+function hide_lightbox() {
+  img_index = -1;
+  update_image();
 }
 
 document.onkeydown = function(event) {
@@ -118,6 +132,9 @@ document.onkeydown = function(event) {
     case 39: // right
       right();
       break;
+    case 81: // q
+      hide_lightbox();
+      break;
   }
   event.preventDefault();
 };
@@ -129,8 +146,7 @@ document.onmouseup = function(event) {
    if (!event) {
      event = window.event;
    }
-   img_index = -1;
-   update_image();
+   hide_lightbox();
    event.preventDefault();
 }
 
