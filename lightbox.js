@@ -1,6 +1,7 @@
 var images = [];
 document.write(
   "<div id=lbdiv><img id=lbimg src=''></div>" +
+  "<div id=black></div>" +
   "<div id=spinnerdiv><center><img id=spinnerimg src='/spinner.gif'></center></div>" +
   "<style>" +
   "#lbdiv {" +
@@ -13,6 +14,17 @@ document.write(
   "   position: fixed;" +
   "   top: 0;" +
   "   left: 0;" +
+  "   z-index: 2;" +
+  "}" +
+  "#black {" +
+  "   margin: 0;" +
+  "   padding: 0;" +
+  "   display: none;" +
+  "   width: 100%;" +
+  "   height: 200%;" +
+  "   position: fixed;" +
+  "   background-color: black;" +
+  "   z-index: 1;" +
   "}" +
   "#lbimg {" +
   "   margin: 0;" +
@@ -24,10 +36,11 @@ document.write(
   "   position: absolute;" +
   "   top: 0;" +
   "   left: 0;" +
-  "   z-index: 1;" +
+  "   z-index: 3;" +
   "}" +
   "</style>");
 var lbdiv = document.getElementById("lbdiv");
+var black = document.getElementById("black");
 var spinnnerdiv = document.getElementById("spinnnerdiv");
 var lbimg = document.getElementById("lbimg");
 var img_index = 0;
@@ -48,6 +61,7 @@ function lightbox(initial_index) {
     }
   }
   lbdiv.style.display = 'block';
+  black.style.display = 'block';
   update_image();
 }
 
@@ -66,6 +80,7 @@ function update_image() {
     lbimg.src='';
     done_loading();
     lbdiv.style.display = 'none';
+    black.style.display = 'none';
     accept_keys = false;
     window.scrollTo(0, oldscroll);
     return;
