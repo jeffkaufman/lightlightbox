@@ -2,7 +2,7 @@ var images = [];
 document.write(
   "<div id=lbdiv><img id=lbimg src=''></div>" +
   "<div id=black></div>" +
-  "<div id=spinnerdiv><center><img id=spinnerimg src='/spinner.gif'></center></div>" +
+  "<div id=spinnerdiv><img id=spinnerimg src='/spinner.gif'></div>" +
   "<style>" +
   "#lbdiv {" +
   "   display: none;" +
@@ -33,7 +33,7 @@ document.write(
   "}" +
   "#spinnerdiv {" +
   "   display: none;" +
-  "   position: absolute;" +
+  "   position: fixed;" +
   "   top: 0;" +
   "   left: 0;" +
   "   z-index: 3;" +
@@ -122,6 +122,8 @@ function done_loading() {
 
 function loading() {
   spinnerdiv.style.display = "block";
+  spinnerdiv.style.top = lbdiv.clientHeight / 2 - 40;
+  spinnerdiv.style.left = lbdiv.clientWidth / 2 - 40;
 }
 
 function hide_lightbox() {
