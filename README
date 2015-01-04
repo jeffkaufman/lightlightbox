@@ -1,0 +1,17 @@
+If you have a page consisting of images that are all links to full
+size versions, you might want some kind of lightbox view.  Perhaps it
+looks like:
+
+    <script src="lightbox.js">
+    <a href="..."><img src="..."></a>
+    <a href="..."><img src="..."></a>
+    <a href="..."><img src="..."></a>
+    <a href="..."><img src="..."></a>
+
+This script will add "onclick" handlers for each of the images so if
+you click on them they go full screen on a black background, and the
+left and right arrow keys will move between sequential images.
+
+Live example:
+
+  http://www.jefftk.com/pictures/2014
