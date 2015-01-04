@@ -134,8 +134,6 @@ document.onmouseup = function(event) {
    event.preventDefault();
 }
 
-document.write('<a href="#" onclick="lightbox(0); return false;">lightbox view</a><br><br>');
-
 var oldscroll = 0;
 
 function load_lightbox_at_point(n) {
