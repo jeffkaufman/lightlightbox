@@ -67,20 +67,20 @@ function lightbox(initial_index) {
   }
   lbdiv.style.display = 'block';
   black.style.display = 'block';
-  update_image();
+  update_image(false /* not popping */);
 }
 
 function left() {
   img_index--;
-  update_image();
+  update_image(false /* not popping */);
 }
 
 function right() {
   img_index++;
-  update_image();
+  update_image(false /* not popping */);
 }
 
-function update_image() {
+function update_image(popping) {
   if (img_index < 0 || img_index >= images.length) {
     lbimg.src='';
     done_loading();
@@ -88,7 +88,7 @@ function update_image() {
     black.style.display = 'none';
     accept_keys = false;
     window.scrollTo(0, oldscroll);
-    if (control_history) {
+    if (control_history && !popping) {
       window.history.go(-1);
     }
     return;
@@ -138,10 +138,10 @@ function loading() {
   spinnerdiv.style.left = lbdiv.clientWidth / 2 - 40;
 }
 
-function hide_lightbox() {
+function hide_lightbox(popping) {
   if (img_index >= 0 && img_index < images.length) {
     img_index = -1;
-    update_image();
+    update_image(popping);
   } else if (window.location.hash != "") {
     // remove hash from url
     window.location = window.location.href.substring(
@@ -150,7 +150,9 @@ function hide_lightbox() {
 }
 
 if (control_history) {
-  window.onpopstate = hide_lightbox;
+  window.onpopstate = function() {
+    hide_lightbox(true /* popping */);
+  }
 }
 
 document.onkeydown = function(event) {
@@ -172,7 +174,7 @@ document.onkeydown = function(event) {
       right();
       break;
     case 81: // q
-      hide_lightbox();
+      hide_lightbox(false /* not popping */);
       break;
   }
   event.preventDefault();
@@ -185,7 +187,7 @@ document.onmouseup = function(event) {
    if (!event) {
      event = window.event;
    }
-   hide_lightbox();
+   hide_lightbox(false /* not popping */);
    event.preventDefault();
 }
 
@@ -275,6 +277,6 @@ swipedetect(lbimg, function(swipedir){
  } else if (swipedir == 'right') {
    left();
  } else {
-   hide_lightbox();
+   hide_lightbox(false /* not popping */);
  }
 })
