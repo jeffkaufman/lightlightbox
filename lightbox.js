@@ -231,9 +231,9 @@ function swipedetect(el, callback){
  startY,
  distX,
  distY,
- threshold = 150, //required min distance traveled to be considered swipe
- restraint = 100, // maximum distance allowed at the same time in perpendicular direction
- allowedTime = 300, // maximum time allowed to travel that distance
+ threshold = 15, //required min distance traveled to be considered swipe
+ restraint = 600, // maximum distance allowed at the same time in perpendicular direction
+ allowedTime = 600, // maximum time allowed to travel that distance
  elapsedTime,
  startTime,
  handleswipe = callback || function(swipedir){}
@@ -260,23 +260,17 @@ function swipedetect(el, callback){
   elapsedTime = new Date().getTime() - startTime // get time elapsed
   if (elapsedTime <= allowedTime){ // first condition for awipe met
    if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
-    swipedir = (distX < 0)? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
-   }
-   else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
-    swipedir = (distY < 0)? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+     handleswipe(distX); // if dist traveled is negative, it indicates left swipe
    }
   }
-  handleswipe(swipedir)
   e.preventDefault()
  }, false)
 }
 
-swipedetect(lbimg, function(swipedir){
- if (swipedir =='left') {
-   right();
- } else if (swipedir == 'right') {
-   left();
- } else {
-   hide_lightbox(false /* not popping */);
- }
-})
+swipedetect(lbimg, function(distX){
+  if (distX < 0) {
+    right();
+  } else {
+    left();
+  }
+});
