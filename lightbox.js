@@ -43,13 +43,18 @@ var lbdiv = document.getElementById("lbdiv");
 var black = document.getElementById("black");
 var spinnnerdiv = document.getElementById("spinnnerdiv");
 var lbimg = document.getElementById("lbimg");
-var img_index = 0;
+var img_index = -1;
 var accept_keys = false;
+
+var control_history = !(typeof history.pushState === 'undefined');
 
 function lightbox(initial_index) {
   oldscroll = window.pageYOffset;
   console.log(window.pageYOffset);
   window.scrollTo(0, 0);
+  if (control_history) {
+    history.pushState({}, "Image " + initial_index, "#" + initial_index);
+  }
   images = [];
   img_index = initial_index;
   var links = document.getElementsByTagName("a");
@@ -83,8 +88,15 @@ function update_image() {
     black.style.display = 'none';
     accept_keys = false;
     window.scrollTo(0, oldscroll);
+    if (control_history) {
+      window.history.go(-1);
+    }
     return;
   }
+  if (control_history) {
+    history.replaceState({}, "Image " + img_index, "#" + img_index);
+  }
+
   accept_keys = true;
   loading();
   lbimg.onload = done_loading;
@@ -127,8 +139,18 @@ function loading() {
 }
 
 function hide_lightbox() {
-  img_index = -1;
-  update_image();
+  if (img_index >= 0 && img_index < images.length) {
+    img_index = -1;
+    update_image();
+  } else if (window.location.hash != "") {
+    // remove hash from url
+    window.location = window.location.href.substring(
+      0, window.location.href.indexOf('#'));
+  }
+}
+
+if (control_history) {
+  window.onpopstate = hide_lightbox;
 }
 
 document.onkeydown = function(event) {
@@ -179,13 +201,21 @@ function load_lightbox_at_point(n) {
 document.addEventListener("DOMContentLoaded", function() {
   var links = document.getElementsByTagName("a");
   var n = 0;
+  var loadlightboxat = -1;
   for (var i = 0; i < links.length; i++) {
     var link = links[i];
     if (link.children.length == 1 &&
         link.children[0].tagName == "IMG") {
       link.onclick = load_lightbox_at_point(n);
+      if (window.location.hash == "#" + n) {
+        link.scrollIntoView();
+        loadlightboxat = n;
+      }
       n++;
     }
+  }
+  if (loadlightboxat > -1) {
+    load_lightbox_at_point(loadlightboxat)();
   }
 });
 
